@@ -31,8 +31,6 @@ jobs:
     needs: Run-Linters
   Build-Deploy:
     runs-on: ubuntu-latest
-    defaults:
-
     steps:
       - run: echo "🎉 building and deploying the application in AWS with Terraform"
       - name: Checkout
