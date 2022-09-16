@@ -36,3 +36,9 @@ lerna-debug.log*
 
 # Environment file
 .env
+
+# Terraform files
+iac/.terraform.lock.hcl
+**/.terraform/*
+*.tfstate
+*.tfstate.*
