@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "portfolio-bperezgo"
     workspaces {
-      name = "portfolio-back"
+      name = "portfolio-back-bperezgo"
     }
   }
 
