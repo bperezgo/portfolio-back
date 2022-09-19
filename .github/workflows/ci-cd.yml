@@ -40,9 +40,7 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: Manual setup Terraform
-        run: "touch $HOME/.terraformrc & echo '{\"credentials\":{\"app.terraform.io\": {\"token\": \"SOMETOKEN\"}}}' >> $HOME/.terraformrc"
-      - name: Cat in another line the credentials 
-        run: cat $HOME/.terraformrc
+        run: "touch $HOME/.terraformrc & echo '{\"credentials\":{\"app.terraform.io\": {\"token\": \"${{ github.event_name }}\"}}}' >> $HOME/.terraformrc"
       - name: Terraform Format
         id: fmt
         working-directory: ./iac
