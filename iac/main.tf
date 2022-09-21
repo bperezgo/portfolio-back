@@ -17,16 +17,25 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-2"
+  region = var.aws_region
 }
 
 resource "aws_instance" "app_server" {
   ami           = "ami-02f3416038bdb17fb"
   instance_type = "t2.micro"
-  #   vpc_security_group_ids = ["sg-0077..."]
-  # +  subnet_id              = "subnet-923a..."
+  subnet_id     = aws_subnet.main_public.id
 
   tags = {
-    Name = var.instance_name
+    Name = "${var.app_name} ec2 instance"
+  }
+}
+
+resource "aws_ecr_repository" "container_registry_repository" {
+  name                 = "portfolio-back"
+  image_tag_mutability = "MUTABLE"
+  force_delete = false
+
+  image_scanning_configuration {
+    scan_on_push = true
   }
 }
