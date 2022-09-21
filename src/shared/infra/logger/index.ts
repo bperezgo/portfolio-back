@@ -21,14 +21,6 @@ export class Logger implements LoggerService, MetadataLogger {
       format: winston.format.json(),
       transports: [new winston.transports.Console()],
     });
-
-    if (process.env.NODE_ENV !== 'production') {
-      this.client.add(
-        new winston.transports.Console({
-          format: winston.format.simple(),
-        }),
-      );
-    }
   }
 
   private datetime(): string {
