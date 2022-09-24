@@ -3,24 +3,32 @@ resource "aws_vpc" "main" {
 
   tags = {
     Name = "${var.app_name} VPC"
+    Environment = var.app_environment
   }
 }
 
 resource "aws_subnet" "main_public" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.1.0/24"
+  count                   = length(var.public_subnets)
+  cidr_block              = element(var.public_subnets, count.index)
+  availability_zone       = element(var.availability_zones, count.index)
+  map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.app_name} public Subnet"
+    Name = "${var.app_name} public Subnet ${count.index + 1}"
+    Environment = var.app_environment
   }
 }
 
 resource "aws_subnet" "main_private" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.2.0/24"
+  count             = length(var.private_subnets)
+  cidr_block        = element(var.private_subnets, count.index)
+  availability_zone = element(var.availability_zones, count.index)
 
   tags = {
-    Name = "${var.app_name} private Subnet"
+    Name = "${var.app_name} private Subnet ${count.index + 1}"
+    Environment = var.app_environment
   }
 }
 
@@ -29,6 +37,7 @@ resource "aws_internet_gateway" "main" {
 
   tags = {
     Name = "${var.app_name} IG"
+    Environment = var.app_environment
   }
 }
 
@@ -42,10 +51,12 @@ resource "aws_route_table" "main" {
 
   tags = {
     Name = "${var.app_name} RT"
+    Environment = var.app_environment
   }
 }
 
 resource "aws_route_table_association" "main" {
-  subnet_id      = aws_subnet.main_public.id
+  count          = length(var.public_subnets)
+  subnet_id      = element(aws_subnet.main_public.*.id, count.index)
   route_table_id = aws_route_table.main.id
 }
