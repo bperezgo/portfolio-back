@@ -101,14 +101,10 @@ resource "aws_ecs_task_definition" "task-back" {
   }
 }
 
-data "aws_ecs_task_definition" "main" {
-  task_definition = aws_ecs_task_definition.task-back.family
-}
-
 resource "aws_ecs_service" "aws-ecs-service" {
   name                 = "${var.app_name}-${var.app_environment}-ecs-service"
   cluster              = aws_ecs_cluster.aws-ecs-cluster.id
-  task_definition      = "${aws_ecs_task_definition.task-back.family}:${max(aws_ecs_task_definition.task-back.revision, data.aws_ecs_task_definition.main.revision)}"
+  task_definition      = "${aws_ecs_task_definition.task-back.family}:${max(aws_ecs_task_definition.task-back.revision, aws_ecs_task_definition.task-back.revision)}"
   launch_type          = "EC2"
   scheduling_strategy  = "REPLICA"
   desired_count        = 1
