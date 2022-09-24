@@ -18,6 +18,6 @@ async function bootstrap() {
   );
   app.use(loggerMiddleware(logger));
   app.use(metadataMiddleware(logger));
-  await app.listen(3001);
+  await app.listen(8080);
 }
 bootstrap();
